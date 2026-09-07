@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Private Vision Agent",
+  "version": "0.5.0",
+  "description": "Reads and sanitizes the active page locally before any server request.",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "permissions": ["activeTab", "tabs", "scripting", "storage"],
+  "host_permissions": ["http://localhost:5173/*"],
+  "optional_host_permissions": [
+    "https://huggingface.co/*",
+    "https://*.huggingface.co/*",
+    "https://*.hf.co/*"
+  ],
+  "action": {
+    "default_title": "Private Vision Agent",
+    "default_popup": "popup.html"
+  }
+}

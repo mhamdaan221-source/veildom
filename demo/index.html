@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Service Application</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand-mark" aria-hidden="true">S</div>
+      <div>
+        <p class="eyebrow">Citizen services</p>
+        <h1>Secure Service Application</h1>
+      </div>
+      <span class="secure-badge">Private session</span>
+    </header>
+
+    <main>
+      <section class="hero-copy">
+        <p class="step-label">Application 24-0817 · Step 1 of 2</p>
+        <h2>Confirm your profile</h2>
+        <p>Review your saved details before continuing. Sensitive information on this page should never leave your device.</p>
+      </section>
+
+      <div class="layout">
+        <section class="card profile-card" aria-labelledby="profile-heading">
+          <div class="profile-heading-row">
+            <img class="avatar" src="/assets/synthetic-profile.png" alt="Synthetic applicant portrait" />
+            <div>
+              <p class="eyebrow">Applicant</p>
+              <h3 id="profile-heading">Aarav Kumar</h3>
+            </div>
+          </div>
+
+          <dl class="details">
+            <div><dt>Email</dt><dd>aarav.kumar@example.com</dd></div>
+            <div><dt>Phone</dt><dd>+91 98765 43210</dd></div>
+            <div><dt>Address</dt><dd>17 Lake View Road, Bengaluru 560001</dd></div>
+            <div><dt>Saved card</dt><dd>4111 1111 1111 1111</dd></div>
+          </dl>
+        </section>
+
+        <section class="card form-card" aria-labelledby="form-heading">
+          <p class="eyebrow">Identity check</p>
+          <h3 id="form-heading">Confirm access</h3>
+
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="email" value="aarav.kumar@example.com" />
+
+          <label for="password">Portal password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" value="demo-password" />
+
+          <label class="check-row" for="confirm">
+            <input id="confirm" name="confirm" type="checkbox" />
+            <span>I confirm these details are current</span>
+          </label>
+
+          <div class="actions">
+            <button class="secondary" type="button">Save for later</button>
+            <button id="continue-button" class="primary" type="button">Continue</button>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>

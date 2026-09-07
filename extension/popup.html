@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Private Vision Agent</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">P</div>
+        <div><p class="kicker">On-device first</p><h1>Private Vision</h1></div>
+      </div>
+      <span class="local-badge"><span></span>Local</span>
+    </header>
+
+    <main>
+      <section class="status-card" aria-live="polite">
+        <span class="status-dot" aria-hidden="true"></span>
+        <div><strong id="status">Ready to capture this page</strong><p>Nothing leaves this device without your approval.</p></div>
+      </section>
+      <p id="error" class="error" role="alert"></p>
+
+      <section class="step-card">
+        <div class="step-heading">
+          <span class="step-number">1</span>
+          <div><h2>Capture &amp; protect</h2><p>Capture the visible page and mask private content locally.</p></div>
+        </div>
+        <button id="redact" type="button">Capture and protect webpage</button>
+        <details id="results" class="page-details" hidden>
+          <summary>
+            <span><strong id="page-title"></strong><small>Page map ready</small></span>
+            <span id="element-count" class="count"></span>
+          </summary>
+          <div class="control-heading">Visible controls</div>
+          <ul id="element-list"></ul>
+        </details>
+
+        <div id="redaction-result" class="redaction-result" hidden>
+          <div class="privacy-success">
+            <span class="privacy-indicator" aria-hidden="true"></span>
+            <div><strong>Private content masked</strong><p id="redaction-summary"></p></div>
+          </div>
+          <details class="preview-details">
+            <summary>View sanitized preview</summary>
+            <img id="redacted-preview" alt="Locally redacted screenshot preview" />
+            <p class="privacy-note">The raw capture stayed in extension memory. This preview has not been uploaded.</p>
+          </details>
+        </div>
+
+      </section>
+
+      <section class="step-card">
+        <div class="step-heading">
+          <span class="step-number">2</span>
+          <div><h2>Ask the assistant</h2><p>Describe your goal after the protected preview is ready.</p></div>
+        </div>
+        <label for="task">What would you like to do?</label>
+        <textarea id="task" rows="2">Help me continue my application</textarea>
+        <button id="assist" type="button" disabled>Ask private assistant</button>
+      </section>
+
+      <section id="analytics-section" class="step-card analytics-card">
+        <details id="evaluation-details" class="evaluation-details">
+          <summary>
+            <span><strong>Evaluation &amp; analytics</strong><small>Local metrics and test history</small></span>
+            <span class="analytics-badge">Private</span>
+          </summary>
+          <div class="analytics-content">
+            <p class="evaluation-help">Measured automatically for this run</p>
+            <dl class="evaluation-grid">
+              <div><dt>Total latency</dt><dd id="eval-total-latency">—</dd></div>
+              <div><dt>Total masks</dt><dd id="eval-mask-count">—</dd></div>
+              <div><dt>Florence</dt><dd id="eval-florence-latency">—</dd></div>
+              <div><dt>Local NER</dt><dd id="eval-ner-latency">—</dd></div>
+              <div><dt>Face model</dt><dd id="eval-face-latency">—</dd></div>
+              <div><dt>Heap change</dt><dd id="eval-heap-change">—</dd></div>
+              <div><dt>Sanitized image</dt><dd id="eval-image-size">—</dd></div>
+              <div><dt>OCR regions read</dt><dd id="eval-ocr-count">—</dd></div>
+              <div><dt>Assistant round trip</dt><dd id="eval-assistant-latency">Not run</dd></div>
+              <div><dt>End-to-end compute</dt><dd id="eval-e2e-latency">Not run</dd></div>
+            </dl>
+
+            <details id="provenance-details" class="provenance-details" hidden>
+              <summary>Mask provenance</summary>
+              <div class="provenance-legend" aria-label="Mask source legend">
+                <span class="source-dom">DOM</span>
+                <span class="source-ner">NER</span>
+                <span class="source-vit">ViT</span>
+                <span class="source-face">Face</span>
+              </div>
+              <img id="provenance-preview" alt="Sanitized screenshot annotated with local mask sources" />
+              <p id="provenance-summary" class="provenance-summary"></p>
+              <p class="privacy-note">Generated from the sanitized preview. This diagnostic image stays local and is never sent to the model.</p>
+            </details>
+
+            <div id="network-proof" class="network-proof" hidden>
+              <div class="network-proof-heading"><strong>Outbound privacy proof</strong><span>Verified</span></div>
+              <dl>
+                <div><dt>Element value fields</dt><dd id="proof-value-fields">—</dd></div>
+                <div><dt>Raw screenshot fields</dt><dd id="proof-raw-fields">—</dd></div>
+                <div><dt>Task PII scan</dt><dd id="proof-task-pii">—</dd></div>
+                <div><dt>Image fingerprint</dt><dd id="proof-image-hash">—</dd></div>
+                <div><dt>Redaction regions</dt><dd id="proof-region-count">—</dd></div>
+              </dl>
+              <p>The client and server independently fingerprinted the same sanitized image. The fingerprint cannot reconstruct the image.</p>
+            </div>
+
+            <div class="audit-panel">
+              <strong>Audit the sanitized preview</strong>
+              <p>Count region-level errors after comparing it with the page.</p>
+              <div class="audit-inputs">
+                <label for="eval-false-positive">False masks<input id="eval-false-positive" type="number" min="0" value="0" /></label>
+                <label for="eval-missed">Missed PII<input id="eval-missed" type="number" min="0" value="0" /></label>
+                <label for="eval-imprecise">Poorly fitted<input id="eval-imprecise" type="number" min="0" value="0" /></label>
+                <label for="eval-false-controls">False controls<input id="eval-false-controls" type="number" min="0" value="0" /></label>
+                <label for="eval-missed-controls">Missed controls<input id="eval-missed-controls" type="number" min="0" value="0" /></label>
+              </div>
+              <button id="save-evaluation" class="secondary-button" type="button">Save local evaluation</button>
+              <p id="evaluation-error" class="evaluation-error" role="alert"></p>
+              <dl id="evaluation-scores" class="score-grid" hidden>
+                <div><dt>Visual context F1</dt><dd id="eval-context-f1">—</dd></div>
+                <div><dt>PII precision</dt><dd id="eval-precision">—</dd></div>
+                <div><dt>PII recall</dt><dd id="eval-recall">—</dd></div>
+                <div><dt>Mask precision</dt><dd id="eval-redaction-precision">—</dd></div>
+              </dl>
+            </div>
+
+            <div class="history-panel">
+              <strong>Local run history</strong>
+              <p id="evaluation-history">No completed runs yet.</p>
+              <div class="export-actions">
+                <button id="export-json" class="secondary-button" type="button" disabled>Export JSON</button>
+                <button id="export-csv" class="secondary-button" type="button" disabled>Export CSV</button>
+              </div>
+              <p id="export-status" class="export-status" role="status"></p>
+            </div>
+
+            <details class="diagnostic-details">
+              <summary>Model diagnostics</summary>
+              <div class="vision-spike">
+                <div class="vision-spike-heading">
+                  <div>
+                    <strong>Local ViT benchmark</strong>
+                    <small>Florence-2 · WebGPU · isolated test</small>
+                  </div>
+                  <span class="webgpu-badge">WebGPU</span>
+                </div>
+                <p>This optional diagnostic tests Florence-2 separately from redaction. Model weights stay cached in Chrome and the screenshot remains inside the extension.</p>
+                <button id="vision-benchmark" class="secondary-button" type="button">Run isolated vision benchmark</button>
+                <div id="vision-result" class="vision-result" hidden>
+                  <progress id="vision-progress" max="100" value="0"></progress>
+                  <p id="vision-status">Preparing local model…</p>
+                  <dl id="vision-metrics" hidden>
+                    <div><dt>Model load</dt><dd id="vision-load-time">—</dd></div>
+                    <div><dt>Inference</dt><dd id="vision-inference-time">—</dd></div>
+                    <div><dt>OCR regions</dt><dd id="vision-region-count">—</dd></div>
+                  </dl>
+                </div>
+              </div>
+            </details>
+          </div>
+        </details>
+      </section>
+
+      <section id="assistant-response" class="step-card decision-card" hidden>
+        <div class="step-heading">
+          <span class="step-number success-number">3</span>
+          <div><p class="kicker">Review before anything happens</p><h2 id="assistant-message"></h2></div>
+        </div>
+        <p id="assistant-action" class="proposed-action"></p>
+        <button id="apply-action" class="apply-action" type="button" hidden>Approve and continue</button>
+        <details class="receipt-details">
+          <summary>Privacy receipt &amp; model details</summary>
+          <p id="privacy-receipt" class="privacy-receipt"></p>
+        </details>
+      </section>
+    </main>
+
+    <footer>Raw page data stays on your device</footer>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
