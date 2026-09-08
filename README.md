@@ -145,7 +145,6 @@ extension/             Chrome extension, privacy pipeline, and local workers
 extension/vendor/      Vendored MediaPipe and ONNX WebAssembly runtimes
 server/                Local server and constrained model integration
 scripts/               Worker build scripts
-output/pdf/            Technical project handbook
 ```
 
 ## Current limitations
@@ -157,7 +156,3 @@ output/pdf/            Technical project handbook
 - DOM rules and local models reduce privacy risk but cannot guarantee detection of every PII format or arbitrary canvas content.
 - Face detection scans visible image regions rather than every pixel of the full tab to reduce inference cost.
 - The local server uses development-oriented CORS and transport settings and should be hardened before production deployment.
-
-## Technical handbook
-
-For a deeper explanation of the architecture, privacy boundary, model pipeline, evaluation methodology, and production considerations, see [`output/pdf/Private_Vision_Agent_Technical_Handbook.pdf`](output/pdf/Private_Vision_Agent_Technical_Handbook.pdf).

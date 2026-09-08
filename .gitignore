@@ -5,3 +5,4 @@ node_modules/
 !.env.example
 npm-debug.log*
 tmp/
+output/pdf/Private_Vision_Agent_Technical_Handbook.pdf
