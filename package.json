@@ -1,8 +1,8 @@
 {
-  "name": "private-vision-agent",
+  "name": "veildom",
   "version": "0.5.0",
   "private": true,
-  "description": "Privacy-preserving browser vision agent hackathon prototype",
+  "description": "Privacy-preserving browser assistant with local visual redaction",
   "scripts": {
     "build:vision": "node scripts/build-vision.mjs",
     "start": "node server/dev-server.js"

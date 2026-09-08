@@ -1,8 +1,8 @@
-# Private Vision Agent
+# VeilDOM
 
 A privacy-preserving Chrome assistant that sanitizes webpage context locally before anything can be sent to an AI provider.
 
-Private Vision Agent combines DOM inspection, local named-entity recognition, Florence-2 WebGPU vision, and MediaPipe face detection to identify and mask sensitive information. The assistant receives a sanitized screenshot and a constrained map of safe page controls—never raw form values or an unrestricted browser interface.
+VeilDOM combines DOM inspection, local named-entity recognition, Florence-2 WebGPU vision, and MediaPipe face detection to identify and mask sensitive information. The assistant receives a sanitized screenshot and a constrained map of safe page controls—never raw form values or an unrestricted browser interface.
 
 ## Highlights
 
@@ -89,7 +89,7 @@ Open `http://localhost:5173` in Chrome.
 2. Enable **Developer mode**.
 3. Select **Load unpacked**.
 4. Choose the `extension` directory from this repository.
-5. Keep the demo page open and launch **Private Vision Agent** from the Chrome toolbar.
+5. Keep the demo page open and launch **VeilDOM** from the Chrome toolbar.
 
 ## Using the assistant
 

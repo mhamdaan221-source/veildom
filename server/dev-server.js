@@ -177,7 +177,7 @@ const requestModelDecision = async (payload, elements) => {
         Authorization: `Bearer ${providerConfig.apiKey}`,
         "Content-Type": "application/json",
         ...(providerConfig.name === "openrouter"
-          ? { "HTTP-Referer": "http://localhost:5173", "X-Title": "Private Vision Agent" }
+          ? { "HTTP-Referer": "http://localhost:5173", "X-Title": "VeilDOM" }
           : {})
       },
       body: JSON.stringify({
